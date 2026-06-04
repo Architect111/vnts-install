@@ -12,9 +12,8 @@
 *vnt 可以帮助您轻松地进行内网穿透
 
 * Detail(详情)：fatedier[<img alt="github" src="https://img.shields.io/badge/github/fatedier/frp-8da0cb?style=for-the-badge&labelColor=555555&logo=github" height="16">](https://github.com/fatedier/frp)
-* Script author（脚本原作者）：clangcn [<img alt="github" src="https://img.shields.io/badge/github/clangcn/onekey_install_shell-8da0cb?style=for-the-badge&labelColor=555555&logo=github" height="16">](https://github.com/clangcn/onekey-install-shell)
 
-## Frps-Onekey-Install-Shell For CentOS/Debian/Ubuntu/Fedora (32bit/64bit)
+## Vnts-Install-Shell For CentOS/Debian/Ubuntu/Fedora (32bit/64bit)
 
 ### Install（安装）
 
@@ -42,7 +41,7 @@ wget https://raw.githubusercontent.com/Architect111/vnts-install/main/install-vn
 ```
 ### Server management（服务管理器）
 ```Bash
-Usage: /etc/init.d/frps {start|stop|restart|status|config|version}
+Usage: ./install-vnts.sh {install|update|uninstall|config|version}
 ```
  
 
