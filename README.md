@@ -2,8 +2,7 @@
 ## vnt服务端一键配置脚本，脚本默認获取Frp最新版本  
 
 [![GitHub Repo][repo-shield]][repo-url]
-[![Stars][stars-shield]][stars-url]
-[![Forks][forks-shield]][forks-url]
+
 
 [repo-shield]: https://img.shields.io/badge/GitHub-mvscode%2Ffrps--onekey-brightgreen?style=flat-square&logo=github
 [repo-url]: https://github.com/mvscode/frps-onekey
