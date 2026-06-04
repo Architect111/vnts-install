@@ -11,12 +11,16 @@
 #### Gitee
 ```Bash
 # 一键安装命令
-wget https://raw.githubusercontent.com/Architect111/vnts-install/main/install-vnts.sh -O install-vnts.sh && chmod +x install-vnts.sh && ./install-vnts.sh install
+wget https://gitee.com/azimiao1999/vnts-install/raw/main/install-vnts.sh -O ./install-vnts.sh
+chmod 700 ./install-vnts.sh
+./install-vnts.sh install
 ```
 #### Github
 ```Bash
 # 一键安装命令
-wget https://raw.githubusercontent.com/Architect111/vnts-install/main/install-vnts.sh -O install-vnts.sh && chmod +x install-vnts.sh && ./install-vnts.sh install
+wget https://raw.githubusercontent.com/Architect111/vnts-install/main/install-vnts.sh -O ./install-vnts.sh
+chmod 700 ./install-vnts.sh
+./install-vnts.sh install
 ```
 ### New inatall
 ```Bash
