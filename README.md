@@ -4,11 +4,6 @@
 [![GitHub Repo][repo-shield]][repo-url]
 
 
-[repo-shield]: https://img.shields.io/badge/GitHub-mvscode%2Ffrps--onekey-brightgreen?style=flat-square&logo=github
-[repo-url]: [https://github.com/Architect111/vnts-install]
-
-
-
 *vnt 可以帮助您轻松地进行内网穿透
 
 * Detail(详情)：https://github.com/vnt-dev/vnt
