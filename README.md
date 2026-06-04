@@ -11,7 +11,7 @@
 
 *vnt 可以帮助您轻松地进行内网穿透
 
-* Detail(详情)：fatedier[<img alt="github" src="https://img.shields.io/badge/github/fatedier/frp-8da0cb?style=for-the-badge&labelColor=555555&logo=github" height="16">](https://github.com/fatedier/frp)
+* Detail(详情)：fatedier[<img alt="github" src="https://img.shields.io/badge/github/fatedier/frp-8da0cb?style=for-the-badge&labelColor=555555&logo=github" height="16">]([https://github.com/fatedier/frp](https://github.com/vnt-dev/vnt))
 
 ## Vnts-Install-Shell For CentOS/Debian/Ubuntu/Fedora (32bit/64bit)
 
