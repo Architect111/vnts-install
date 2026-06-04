@@ -5,7 +5,7 @@
 
 
 [repo-shield]: https://img.shields.io/badge/GitHub-mvscode%2Ffrps--onekey-brightgreen?style=flat-square&logo=github
-[repo-url]: https://github.com/mvscode/frps-onekey
+[repo-url]: [https://github.com/Architect111/vnts-install]
 
 
 
