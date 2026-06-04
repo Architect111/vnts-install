@@ -4,7 +4,7 @@ INSTALL_RAW="https://raw.githubusercontent.com/Architect111/vnts-install/main"
 TAG_VER="v1.2.12"
 LOCAL_CONF="/root/vnts.conf"
 
-# 架构自动识别
+# 自动识别CPU架构
 get_arch_name(){
     local arch=$(uname -m)
     case ${arch} in
@@ -21,17 +21,16 @@ if [ -z "${BIN_NAME}" ];then
     exit 1
 fi
 
-# 清理端口&进程
+# 清理进程+占用端口
 clean_env(){
     pkill -9 -f vnts 2>/dev/null
     sleep 1
 }
 
-# 交互式配置+默认值逻辑
+# 交互式配置，回车默认值，空密钥/密码自动随机生成
 SetConfig(){
-    # 已有本地配置直接复用，不再弹窗
     if [ -f ${LOCAL_CONF} ];then
-        echo "✅ 检测本地已有配置，沿用原有参数，跳过配置设置"
+        echo "✅ 检测本地已有私有配置，沿用原有参数，跳过配置填写"
         return 0
     fi
 
@@ -40,7 +39,6 @@ SetConfig(){
     VNTS_PORT=${VNTS_PORT:-29872}
 
     read -p "连接密钥【回车自动随机生成密钥】：" VNTS_TOKEN
-    # 空输入随机生成16位密钥
     VNTS_TOKEN=${VNTS_TOKEN:-$(head -c16 /dev/urandom|xxd -p)}
 
     read -p "WEB面板端口【默认:29870】：" WEB_PORT
@@ -50,10 +48,9 @@ SetConfig(){
     WEB_USERNAME=${WEB_USERNAME:-admin}
 
     read -p "WEB登录密码【回车自动随机生成密码】：" WEB_PASSWORD
-    # 空输入随机12位密码
     WEB_PASSWORD=${WEB_PASSWORD:-$(head -c12 /dev/urandom|xxd -p)}
 
-    # 下载模板替换占位符生成私有配置
+    # 拉取云端模板，替换占位符生成本地私有配置
     wget -q ${INSTALL_RAW}/vnts.conf -O ${LOCAL_CONF}.tmp
     sed -i \
     -e "s|__VNTS_PORT__|${VNTS_PORT}|g" \
@@ -67,26 +64,24 @@ SetConfig(){
     echo "📌 WEB账号:${WEB_USERNAME} | 密码:${WEB_PASSWORD}，妥善保存！"
 }
 
-# 安装逻辑
+# 安装功能
 Install(){
     cd /root
     clean_env
-    # 拉取对应架构二进制
     wget -q ${BIN_REPO}/releases/download/${TAG_VER}/${BIN_NAME}
     tar -zxf ${BIN_NAME}
     chmod +x ./vnts
-    # 生成本地配置
     SetConfig
-    # 只拉启动脚本，不拉配置
     wget -q ${INSTALL_RAW}/vnts-start.sh -O /root/vnts-start.sh
     chmod +x /root/vnts-start.sh
 
-    # 写入systemd服务
+    # 写入systemd服务配置
     mkdir -p /etc/systemd/system
     cat > /etc/systemd/system/vnts.service <<EOF
 [Unit]
-Description=VNTS Server
+Description=VNTS内网穿透服务
 After=network.target
+Documentation=https://github.com/Architect111/vnts-install
 [Service]
 Type=simple
 User=root
@@ -104,7 +99,7 @@ EOF
     systemctl daemon-reload
     systemctl enable --now vnts
 
-    # 自动放行配置内端口
+    # 自动放行配置里的端口
     PORT_MAIN=$(grep PORT= ${LOCAL_CONF}|cut -d'=' -f2)
     PORT_WEB=$(grep WEB_PORT= ${LOCAL_CONF}|cut -d'=' -f2)
     ufw allow ${PORT_MAIN}/tcp
@@ -112,10 +107,10 @@ EOF
     ufw allow ${PORT_WEB}/tcp
     ufw reload
 
-    echo -e "\n✅ VNTS安装完成！查看状态：systemctl status vnts"
+    echo -e "\n✅ VNTS安装完成！查看运行状态：systemctl status vnts"
 }
 
-# 更新：只更程序+启动脚本，**绝不覆盖本地配置文件**
+# 更新功能：仅更新程序与启动脚本，永久保留本地配置不覆盖
 Update(){
     cd /root
     clean_env
@@ -123,7 +118,6 @@ Update(){
     wget -q ${BIN_REPO}/releases/download/${TAG_VER}/${BIN_NAME}
     tar -zxf ${BIN_NAME}
     chmod +x ./vnts
-    # 更新启动脚本
     wget -q ${INSTALL_RAW}/vnts-start.sh -O /root/vnts-start.sh
     chmod +x /root/vnts-start.sh
 
@@ -132,7 +126,7 @@ Update(){
     echo "✅ 更新完成，本机原有密码、端口全部保留未修改"
 }
 
-# 卸载
+# 完整卸载
 Uninstall(){
     systemctl stop vnts
     systemctl disable vnts
@@ -144,12 +138,43 @@ Uninstall(){
     ufw delete allow 29872/udp
     ufw delete allow 29870/tcp
     ufw reload
-    echo "✅ VNTS已彻底卸载"
+    echo "✅ VNTS已彻底卸载完毕"
 }
 
+# 命令分支 + 内置说明书（对标你截图FRPS格式）
 case "$1" in
 install) Install ;;
 update) Update ;;
 uninstall) Uninstall ;;
-*) echo "使用命令：$0 install | update | uninstall" ;;
+config)
+    echo "📝 正在打开本地私有配置文件：${LOCAL_CONF}"
+    nano ${LOCAL_CONF}
+    echo "💡 修改完成后执行：systemctl restart vnts 即可生效"
+;;
+version)
+    echo "当前VNTS程序版本：${TAG_VER}"
+;;
+*)
+# 下面就是和你截图一模一样的说明书，不输参数/输错命令自动弹出
+echo "===================== VNTS 使用帮助 ====================="
+echo "Uninstall（卸载）"
+echo "  ./install-vnts.sh uninstall"
+echo ""
+echo "Update（更新程序/启动脚本，保留本机配置）"
+echo "  ./install-vnts.sh update"
+echo ""
+echo "Server management（服务管理器）"
+echo "  Usage: ./install-vnts.sh {install|update|uninstall|config|version}"
+echo ""
+echo "参数说明："
+echo "  install    → 全新安装VNTS服务"
+echo "  update     → 在线升级程序，不改动本地配置密码"
+echo "  uninstall  → 完整删除程序、配置、系统服务"
+echo "  config     → 一键编辑本地配置文件(修改端口/密钥/面板密码)"
+echo "  version    → 查看当前VNTS版本号"
+echo ""
+echo "【系统原生启停命令】"
+echo "systemctl {start|stop|restart|status} vnts"
+echo "========================================================"
+;;
 esac
