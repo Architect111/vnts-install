@@ -1,9 +1,6 @@
 
 ## vnt服务端一键配置脚本，脚本默認获取Frp最新版本  
 
-[![GitHub Repo][repo-shield]][repo-url]
-
-
 *vnt 可以帮助您轻松地进行内网穿透
 
 * Detail(详情)：https://github.com/vnt-dev/vnt
